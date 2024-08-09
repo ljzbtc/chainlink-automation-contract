@@ -1,19 +1,57 @@
-# Foundry Starter Kit
+# SmallBank Smart Contract
 
-This is my custom Foundry starter kit for daily use in smart contract development and deployment.
+## Overview
+
+SmallBank is a simple Ethereum smart contract that simulates basic banking operations. It allows users to deposit Ether and implements an automated system to transfer half of the contract's balance to the owner when it reaches 0.1 ETH or more.
+
+## Features
+
+- **Deposit**: Users can deposit Ether into the contract.
+- **Withdrawal**: The bank owner can withdraw all funds from the contract.
+- **Automated Transfer**: Using Chainlink Automation, the contract automatically transfers half of its balance to the owner when it reaches 1 ETH or more.
+- **Balance Tracking**: The contract keeps track of individual user deposits.
+
+## Contract Functions
+
+### `constructor()`
+- Initializes the contract and sets the deployer as the bank owner.
+
+### `withdraw()`
+- Allows the bank owner to withdraw all funds from the contract.
+
+### `deposited()`
+- Public function called when users deposit Ether into the contract.
+
+### `checkUpkeep(bytes calldata checkData)`
+- Part of the Chainlink Automation interface.
+- Checks if the contract balance is 1 ETH or more.
+- Returns a boolean indicating if upkeep is needed and the current balance.
+
+### `performUpkeep(bytes calldata performData)`
+- Part of the Chainlink Automation interface.
+- Transfers half of the contract balance to the owner if conditions are met.
+
+### `receive()`
+- Fallback function to handle direct Ether transfers to the contract.
+
+## Setup and Deployment
+
+1. Deploy the contract to an Ethereum network (mainnet, testnet, or local network).
+2. The deploying address becomes the bank owner.
+3. Register the contract with Chainlink Automation for automatic balance checks and transfers.
 
 ## Usage
 
-### Deploying and Verifying a Contract
+- Users can send Ether directly to the contract address to make deposits.
+- The bank owner can call the `withdraw()` function to withdraw all funds.
+- Chainlink Automation will periodically check the contract balance and transfer half to the owner when it reaches 1 ETH or more.
 
-1. Source your environment variables:
+## Security Considerations
 
-source .env
+- Only the bank owner can withdraw funds.
+- The automated transfer system relies on Chainlink Automation, ensure proper setup and LINK token funding.
+- Consider implementing additional security measures like pause functionality or withdrawal limits in a production environment.
 
-2. Run the deployment script:
+## License
 
-forge script --account dev --chain sepolia script/deployer.s.sol --rpc-url $SEPOLIA_RPC_URL --broadcast --verify -vvvv --sender 0x2cf56496f155914d84e6eda6e2c0076aeae5b0f0
-
-### Verifying an Already Deployed Contract
-
-forge verify-contract 0x50c56eb8e5c30992cba712246b72b94968263bb9 TradeDevil --chain sepolia
+This project is licensed under the MIT License.
